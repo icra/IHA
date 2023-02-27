@@ -23,8 +23,12 @@ class IHA:
         if df[flow_col].dtype.kind not in 'iuf':    #integer or unsigned integer or float
             raise TypeError(f'{flow_col} must be a numeric object')
         
-        self.df = df
-        self.date_col = date_col
+        #drop all columns except date_col and flow_col
+        self.df = df[[date_col, flow_col]].copy()
+
+        #make data_col the index
+        self.df = self.df.set_index(date_col)
+        
         self.flow_col = flow_col
 
     
