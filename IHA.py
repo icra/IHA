@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 class IHA:
     def __init__(self, df, date_col = 'Date', flow_col = 'Flow'):
@@ -31,5 +32,63 @@ class IHA:
         
         self.flow_col = flow_col
 
+    """
+    Group 2
+    """
+    def annual_k_days_min_max(self, k, min_max):
+
+        #for each year, calculate the rolling mean of k days and group by years
+        mean_grouped_by_year = self.df.groupby(self.df.index.year).rolling(k).mean().groupby(self.df.index.year)
+
+        if min_max == 'min':
+            return mean_grouped_by_year.min()
+        elif min_max == 'max':
+            return mean_grouped_by_year.max()
+        else:
+            raise TypeError(f'{min_max} must be either "min" or "max"')
+        
+    def annual_1_day_minima(self):
+        return self.annual_k_days_min_max(1, 'min')
     
-    # add functions here
+    def annual_1_day_maxima(self):
+        return self.annual_k_days_min_max(1, 'max')
+    
+    def annual_7_day_minima(self):
+        return self.annual_k_days_min_max(7, 'min')
+    
+    def annual_7_day_maxima(self):
+        return self.annual_k_days_min_max(7, 'max')
+    
+    def annual_90_day_minima(self):
+        return self.annual_k_days_min_max(90, 'min')
+    
+    def annual_90_day_maxima(self):
+        return self.annual_k_days_min_max(90, 'max')
+    
+    """
+    Misc
+    """
+    #number of zero flow days per year
+    def zero_flow_days(self):
+        return self.df.groupby(self.df.index.year).apply(lambda x: x[x[self.flow_col] == 0].count())        
+        
+    """
+    Group 3
+    """
+    #1 day min julian day
+    def annual_1_day_min_julian_day(self):
+        return self.df.groupby(self.df.index.year).apply(lambda x: x[x[self.flow_col] == x[self.flow_col].min()].index.dayofyear[0])
+
+
+    #1 day max julian day
+    def annual_1_day_max_julian_day(self):
+        return self.df.groupby(self.df.index.year).apply(lambda x: x[x[self.flow_col] == x[self.flow_col].max()].index.dayofyear[0])
+    
+    """
+    Group 4
+    """
+    def low_pulses_per_year(self):
+        #for each year, calculate number of low pulses
+        pass
+
+
