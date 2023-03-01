@@ -84,7 +84,15 @@ class IHA:
         return self.percentile_k(30)
 
     def percentile_90(self):
-        return self.percentile_k(90)       
+        return self.percentile_k(90) 
+
+    def baseflow_index(self): 
+
+        #annual 1 day avg
+        annual_1_day_avg = self.df.groupby(self.df.index.year).mean()
+
+        #annual 7 day minima divided by annual 1 day avg
+        return self.annual_7_day_minima() / annual_1_day_avg    
         
     """
     Group 3
