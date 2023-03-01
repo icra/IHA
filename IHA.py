@@ -70,7 +70,21 @@ class IHA:
     """
     #number of zero flow days per year
     def zero_flow_days(self):
-        return self.df.groupby(self.df.index.year).apply(lambda x: x[x[self.flow_col] == 0].count())        
+        return self.df.groupby(self.df.index.year).apply(lambda x: x[x[self.flow_col] == 0].count()) 
+
+    #percentile k per year
+    def percentile_k(self, k):
+        return self.df.groupby(self.df.index.year).apply(lambda x: x[self.flow_col].quantile(k/100))
+    
+    #percentile 10 per year
+    def percentile_10(self):
+        return self.percentile_k(10)
+
+    def percentile_30(self):
+        return self.percentile_k(30)
+
+    def percentile_90(self):
+        return self.percentile_k(90)       
         
     """
     Group 3

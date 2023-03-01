@@ -96,8 +96,8 @@ g3_a03 <- group3(a03_zoo, "calendar")
 
 ## IHA Group 4
 
-g4_a47 <- group4(a47_zoo, "calendar", thresholds = quantile(a47_zoo, c(.1, .9), na.rm = T))               ### Problema: fem servir els percentils 10 i 90 de tota la sèrie, no de cada any en concret. Sembla però que a l'IHA també ho deuen fer així?
-g4_a03 <- group4(a03_zoo, "calendar", thresholds = quantile(a03_zoo, c(.1, .9), na.rm = T))
+g4_a47 <- group4(a47_zoo, "calendar", thresholds = quanquantiletile(a47_zoo, c(.1, .9), na.rm = T))               ### Problema: fem servir els percentils 10 i 90 de tota la sèrie, no de cada any en concret. Sembla però que a l'IHA també ho deuen fer així?
+g4_a03 <- group4(a03_zoo, "calendar", thresholds = (a03_zoo, c(.1, .9), na.rm = T))
 
 ## IHA Group 5
 
