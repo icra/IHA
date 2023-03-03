@@ -14,7 +14,11 @@ class IHA:
         
         #check if Date is a datetime object
         if df[date_col].dtype.kind != 'M':    #Datetime
-            raise TypeError(f'{date_col} must be a datetime object')
+            #try to convert to datetime
+            try:
+                df[date_col] = pd.to_datetime(df[date_col])
+            except:
+                raise TypeError(f'{date_col} must be a datetime object')
         
         #check if df has a column named flow_col
         if flow_col not in df.columns:
