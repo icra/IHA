@@ -1,5 +1,9 @@
 import pandas as pd
 import numpy as np
+from gtda.time_series import TakensEmbedding
+from gtda.homology import VietorisRipsPersistence
+TE = TakensEmbedding(time_delay=1, dimension=2)
+VRP = VietorisRipsPersistence()
 
 class IHA:
     def __init__(self, df, date_col = 'Date', flow_col = 'Flow'):
@@ -214,4 +218,22 @@ class IHA:
             years.append(year)
         
         return pd.DataFrame({"Date":years, "Flow":counts}).set_index(["Date"]).Flow
+    
+
+    def persistent_homology(self):
+        #returns an array with 0 dimensional and 1 dimensional persistent diagrams for each year.
+        PDs = {}
+        for year, flow in self.df.groupby(self.df.index.year):
+            PDs.update({str(year):[[],[]]})
+            cloud = TE.fit_transform([np.array(flow.fillna(0)["Flow"]), [0,1]])
+            PD = VRP.fit_transform(cloud)
+            for point in PD[0]:
+                if point[2] == 0:
+                    PDs[str(year)][0].append(np.array([point[0], point[1]]))
+                else:
+                    PDs[str(year)][1].append(np.array([point[0], point[1]]))
+            PDs[str(year)][0] = np.array(PDs[str(year)][0])
+            PDs[str(year)][1] = np.array(PDs[str(year)][1])
+
+        return PDs
 
